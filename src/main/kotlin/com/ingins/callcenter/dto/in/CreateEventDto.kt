@@ -1,6 +1,17 @@
 package com.ingins.callcenter.dto.`in`
 
-/*
+import com.ingins.callcenter.entity.EventsData
+import com.ingins.callcenter.entity.User
+import org.hibernate.annotations.Type
+import java.util.*
+import javax.persistence.CascadeType
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+
+
 data class CreateEventDto(
-    val
-)*/
+    val userId: UUID,
+    val type: String,
+    val data: EventsData,
+    val points: Int
+)

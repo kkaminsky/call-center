@@ -20,6 +20,9 @@ data class Data(
 ) : Serializable
 
 data class Achieve(
-    val name: String
+    val name: String,
+    val description: String,
+
+    val stage: Int = 0
 ): Serializable
 
