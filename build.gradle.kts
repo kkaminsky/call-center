@@ -1,10 +1,9 @@
-
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 plugins {
     id("org.springframework.boot") version "2.5.3"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("com.google.cloud.tools.jib") version "3.1.4"
     kotlin("jvm") version "1.5.21"
     kotlin("kapt") version "1.5.21"
     kotlin("plugin.spring") version "1.5.21"
@@ -51,4 +50,48 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.register<Exec>("composeUpCallCenter") {
+    doFirst {
+        workingDir = project.projectDir
+        commandLine = listOf(
+            "docker-compose", "up", "--build", "--remove-orphans",
+            "--attach-dependencies", "--abort-on-container-exit", "callcenter.ingins.com"
+        )
+    }
+    group = "compose"
+    dependsOn("jibDockerBuild")
+}
+
+tasks.register<Exec>("composeDown") {
+    doFirst {
+        workingDir = project.projectDir
+        commandLine = listOf("docker-compose", "down", "-v", "--remove-orphans")
+    }
+    group = "compose"
+}
+
+jib {
+    from {
+        image = "openjdk:16.0.2-oraclelinux8"
+    }
+    to {
+        image = "call-center:latest"
+    }
+    container {
+        jvmFlags = listOf(
+            "-XX:+AlwaysActAsServerClassMachine",
+            "-Xms2g",
+            "-Xmx2g",
+            "-XX:G1HeapRegionSize=1m",
+            "-XX:+AlwaysPreTouch",
+            "-XX:+ScavengeBeforeFullGC",
+            "-XX:+DisableExplicitGC",
+            "-XX:MaxDirectMemorySize=1g",
+            "-XX:MaxMetaspaceSize=256m",
+            "--illegal-access=warn",
+            "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005"
+        )
+    }
 }

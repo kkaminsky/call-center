@@ -1,6 +1,21 @@
 version: "3.7"
 
 services:
+
+  callcenter.ingins.com:
+    image: call-center:latest
+    hostname: callcenter
+    domainname: ingins.com
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    expose:
+      - 8080
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: development
+
   postgres:
     image: postgres
     container_name: postgres
@@ -8,7 +23,7 @@ services:
       POSTGRES_DB: call_center
       POSTGRES_USER: ingins
       POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
     expose:
-      - 5444
-    command: -p 5444
-    network_mode: "host"
+      - 5432
