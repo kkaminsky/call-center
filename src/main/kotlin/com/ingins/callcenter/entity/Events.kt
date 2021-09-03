@@ -20,8 +20,11 @@ class Events(
 
 
 data class EventsData(
-    val game1: String? = null,
-    val game2: String? = null
+    val speedGame: SpeedGame? = null,
+    val searchGame: SearchGame? = null,
+    val tabGame: TabGame? = null,
+    val cookieClickerGame: CookieClickerGame? = null,
+    val documentAnalized: DocumentAnalized? = null
 ) : Serializable
 
 
