@@ -1,0 +1,145 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-schema
+      author: kkaminsky
+      changes:
+        - sql:
+            sql: CREATE SCHEMA IF NOT EXISTS ${schema};
+  - changeSet:
+      id: create-table-user
+      author: kkaminsky
+      changes:
+        - createTable:
+            tableName: user
+            schemaName: ${schema}
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKeyName: state_pkey
+                    primaryKey: true
+                    unique: true
+                  name: id
+                  type: UUID
+              - column:
+                  name: name
+                  type: VARCHAR
+              - column:
+                  name: rank
+                  type: bigint
+              - column:
+                  name: data
+                  type: jsonb
+              - column:
+                  name: create_time
+                  type: TIMESTAMP(3)
+              - column:
+                  name: update_time
+                  type: TIMESTAMP(3)
+  - changeSet:
+      id: create-table-events
+      author: kkaminsky
+      changes:
+        - createTable:
+            tableName: events
+            schemaName: ${schema}
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKeyName: events_pkey
+                    primaryKey: true
+                    unique: true
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: events_user_fkey
+                    references: ${schema}.user(id)
+                    deleteCascade: true
+                  name: user
+                  type: UUID
+              - column:
+                  name: type
+                  type: VARCHAR
+              - column:
+                  name: points
+                  type: bigint
+              - column:
+                  name: data
+                  type: jsonb
+              - column:
+                  name: create_time
+                  type: TIMESTAMP(3)
+              - column:
+                  name: update_time
+                  type: TIMESTAMP(3)
+  - changeSet:
+      id: create-table-tourney
+      author: kkaminsky
+      changes:
+        - createTable:
+            tableName: tourney
+            schemaName: ${schema}
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKeyName: tourney_pkey
+                    primaryKey: true
+                    unique: true
+                  name: id
+                  type: UUID
+              - column:
+                  name: start_time
+                  type: TIMESTAMP(3)
+              - column:
+                  name: end_time
+                  type: TIMESTAMP(3)
+              - column:
+                  name: type
+                  type: VARCHAR
+              - column:
+                  name: result
+                  type: jsonb
+              - column:
+                  name: create_time
+                  type: TIMESTAMP(3)
+              - column:
+                  name: update_time
+                  type: TIMESTAMP(3)
+  - changeSet:
+      id: create-table-competition
+      author: kkaminsky
+      changes:
+        - createTable:
+            tableName: competition
+            schemaName: ${schema}
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKeyName: competition_pkey
+                    primaryKey: true
+                    unique: true
+                  name: id
+                  type: UUID
+              - column:
+                  name: user1
+                  type: jsonb
+              - column:
+                  name: user2
+                  type: jsonb
+              - column:
+                  name: result
+                  type: jsonb
+              - column:
+                  name: is_finished
+                  type: boolean
+              - column:
+                  name: create_time
+                  type: TIMESTAMP(3)
+              - column:
+                  name: update_time
+                  type: TIMESTAMP(3)

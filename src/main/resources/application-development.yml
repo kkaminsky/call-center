@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5444/call_center
+    username: ingins
+    password: secret
+  liquibase:
+    default-schema: call_center
+    change-log: "classpath:/db/changelog/changelog-master.yml"
+    parameters:
+      schema: call_center
+      catalog: call_center
+    liquibase-schema: public
+  application:
+    name: call_center
+  jpa:
+    properties:
+      hibernate:
+        default_schema: call_center
+        order_inserts: true
+        order_updates: true
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
+        generate_statistics: true
+        jdbc:
+          batch_size: 100
+          fetch_size: 100
+          batch_versioned_data: true
+    open-in-view: false
+    generate-ddl: false
+logging:
+  level:
+    org.hibernate.stat: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.SQL: DEBUG
+server:
+  port: 8383
+  error:
+    include-message : always

@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_DB: call_center
+      POSTGRES_USER: ingins
+      POSTGRES_PASSWORD: secret
+    expose:
+      - 5444
+    command: -p 5444
+    network_mode: "host"
