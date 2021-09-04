@@ -16,10 +16,16 @@ class TourneyRunner(
 ) : CommandLineRunner {
 
     val tourneyMap = mutableMapOf<String,UUID>()
-    val eventsType = listOf("WORK","GAME")
+    val eventsType = listOf("driversLicense",
+            "passportRF",
+
+            "zagranpasport",
+
+            "snils"
+         )
 
     override fun run(vararg args: String?) {
-        val delay = TimeUnit.MINUTES.toMillis(10)
+        val delay = TimeUnit.MINUTES.toMillis(10*1000*1000)
         tourneyScheduler.scheduleWithFixedDelay(this::runNewTourneys,delay)
     }
 

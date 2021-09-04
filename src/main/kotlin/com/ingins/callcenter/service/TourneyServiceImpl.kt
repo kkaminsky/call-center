@@ -23,7 +23,7 @@ class TourneyServiceImpl(
     override fun createTourney(tourneyEventType: String): Tourney {
         return tourneyRepository.save(Tourney(
             startTime = Instant.now(),
-            endTime = Instant.now().plusSeconds(600),
+            endTime = Instant.now().plusSeconds(600*1000*1000),
             type = tourneyEventType,
             result = ResultData(
                 results = listOf()
@@ -41,7 +41,7 @@ class TourneyServiceImpl(
                 Result(
                     username = pair.first.name,
                     place = index +1,
-                    earnedPoints = 10 / (index + 1)
+                    earnedPoints = pair.second
                 )
             })
         return tourney
