@@ -49,8 +49,11 @@ class CompetitionServiceImpl(
     }
 
     @Transactional
-    override fun fixResult(userId: UUID,eventId: UUID): Competition {
-        val event = eventsRepository.getById(eventId)
+    override fun fixResult(userId: UUID): Competition {
+        val event = eventsRepository
+            .findAll()
+            .filter { it.user.id == userId }
+            .maxByOrNull { it.createTime }!!
         val currentCompetition = competitionRepository.findAll()
             .first { !it.isFinished
                     && (it.user1?.let { it.userId == event.user.id} ?: false
@@ -84,6 +87,8 @@ class CompetitionServiceImpl(
                     earnedPoints = 5
                 )
             }
+            user.lastResult = null
+            opponent.lastResult = null
         }
         return competitionRepository.save(currentCompetition)
     }

@@ -35,12 +35,11 @@ class CompetitionController(
 
 
     data class FixResultDto(
-        val eventId: UUID,
         val userId: UUID
     )
 
     @PostMapping("/fix")
     fun fixResult(@RequestBody dto: FixResultDto): Competition {
-        return competitionService.fixResult(dto.userId,dto.eventId)
+        return competitionService.fixResult(dto.userId)
     }
 }

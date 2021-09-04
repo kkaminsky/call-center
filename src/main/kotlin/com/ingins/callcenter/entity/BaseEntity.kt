@@ -1,5 +1,6 @@
 package com.ingins.callcenter.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType
 import org.hibernate.annotations.CreationTimestamp
@@ -47,6 +48,8 @@ abstract class BaseEntity<T : Serializable> : Persistable<T> {
 
     abstract fun idGenerator(): T
 
+    @Transient
+    @JsonIgnore
     override fun isNew(): Boolean {
         return id == null
     }

@@ -20,7 +20,7 @@ class UserController(
 
     @PostMapping("/all")
     fun getAllUsers(): List<User>{
-        return userService.getAll()
+        return userService.getAll().sortedByDescending { it.earnedPoints }
     }
 
 
