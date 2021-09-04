@@ -63,4 +63,4 @@ data class DocumentAnalized(
     val charCounts: Int,
     val hasError: Boolean,
     val isFinishedInTime: Boolean,
-    val timer: Instant) : Serializable
+    val timer: Int) : Serializable

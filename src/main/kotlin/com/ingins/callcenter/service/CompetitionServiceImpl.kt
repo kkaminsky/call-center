@@ -63,7 +63,7 @@ class CompetitionServiceImpl(
             currentCompetition.user2!! to currentCompetition.user1
         }
 
-        user.lastResult = (event.points/event.data.documentAnalized!!.timer.epochSecond
+        user.lastResult = (event.points/event.data.documentAnalized!!.timer
                 *event.data.documentAnalized.difficult).toDouble()
         if(opponent.lastResult!=null){
             if(opponent.lastResult!! >=user.lastResult!!){
