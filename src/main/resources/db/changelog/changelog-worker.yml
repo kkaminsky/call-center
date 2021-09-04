@@ -143,3 +143,40 @@ databaseChangeLog:
               - column:
                   name: update_time
                   type: TIMESTAMP(3)
+  - changeSet:
+      id: create-table-achivement
+      author: mezencevrv
+      changes:
+        - createTable:
+            tableName: achivement
+            schemaName: ${schema}
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKeyName: achivement_pkey
+                    primaryKey: true
+                    unique: true
+                  name: id
+                  type: UUID
+              - column:
+                  name: name
+                  type: VARCHAR
+              - column:
+                  name: event_type
+                  type: VARCHAR
+              - column:
+                  name: description
+                  type: VARCHAR
+              - column:
+                  name: duration
+                  type: VARCHAR
+              - column:
+                  name: points
+                  type: bigint
+              - column:
+                  name: create_time
+                  type: TIMESTAMP(3)
+              - column:
+                  name: update_time
+                  type: TIMESTAMP(3)
