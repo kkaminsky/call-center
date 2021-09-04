@@ -19,7 +19,7 @@ class TourneyRunner(
     val eventsType = listOf("WORK","GAME")
 
     override fun run(vararg args: String?) {
-        val delay = TimeUnit.MINUTES.toMillis(1)
+        val delay = TimeUnit.MINUTES.toMillis(10)
         tourneyScheduler.scheduleWithFixedDelay(this::runNewTourneys,delay)
     }
 

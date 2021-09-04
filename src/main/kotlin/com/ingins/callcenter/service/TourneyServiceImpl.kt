@@ -23,7 +23,7 @@ class TourneyServiceImpl(
     override fun createTourney(tourneyEventType: String): Tourney {
         return tourneyRepository.save(Tourney(
             startTime = Instant.now(),
-            endTime = null,
+            endTime = Instant.now().plusSeconds(600),
             type = tourneyEventType,
             result = ResultData(
                 results = listOf()
@@ -32,9 +32,25 @@ class TourneyServiceImpl(
     }
 
     @Transactional
+    override fun getCurrentResults(tourneyEventType: String): Tourney {
+        val tourney = tourneyRepository.findAll().first { it.type == tourneyEventType }
+        tourney.result = ResultData(userService.getLeaders(tourney.startTime, Instant.now(),tourney.type)
+            .take(3)
+            .filter { it.second!=0 }
+            .mapIndexed { index, pair ->
+                Result(
+                    username = pair.first.name,
+                    place = index +1,
+                    earnedPoints = 10 / (index + 1)
+                )
+            })
+        return tourney
+    }
+
+
+    @Transactional
     override fun endTourney(tourneyId: UUID): Tourney {
         val tourney = tourneyRepository.getById(tourneyId)
-        tourney.endTime = Instant.now()
         tourney.result = ResultData(userService.getLeaders(tourney.startTime,tourney.endTime!!,tourney.type)
             .take(3)
             .filter { it.second!=0 }
