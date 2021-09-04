@@ -32,6 +32,30 @@ class TourneyServiceImpl(
     }
 
     @Transactional
+    override fun getCurrentResultsWithUser(tourneyEventType: String,userId: UUID): Tourney {
+        val tourney = tourneyRepository.findAll().first { it.type == tourneyEventType }
+        val users = userService.getLeaders(tourney.startTime, Instant.now(),tourney.type)
+            .take(3)
+            .filter { it.second!=0 }
+        val targetUser = users.find { it.first.id==userId }
+        val finalUsers = if (targetUser==null){
+            val userForAdd = userService.getLeaders(
+                tourney.startTime,
+                Instant.now(),
+                tourney.type).find { it.first.id==userId }!!
+            users.plus(userForAdd)
+        } else users
+        tourney.result = ResultData(finalUsers.mapIndexed { index, pair ->
+            Result(
+                username = pair.first.name,
+                place = index +1,
+                earnedPoints = pair.second
+            )
+        })
+        return tourney
+    }
+
+    @Transactional
     override fun getCurrentResults(tourneyEventType: String): Tourney {
         val tourney = tourneyRepository.findAll().first { it.type == tourneyEventType }
         tourney.result = ResultData(userService.getLeaders(tourney.startTime, Instant.now(),tourney.type)
