@@ -91,10 +91,6 @@ class EventsServiceImpl(
                 points = createEvent.points
             )
         )
-
-        if (newEvent.type == "WORK") {
-            competitionService.reduceHealth(newEvent)
-        }
         return newEvent
     }
 
