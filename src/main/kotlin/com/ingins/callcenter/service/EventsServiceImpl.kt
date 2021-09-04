@@ -40,7 +40,7 @@ class EventsServiceImpl(
             }
 
             val percent = if (it.eventType == createEvent.type) {
-                createEvent.points / it.points * 100
+                (createEvent.points.toDouble() / it.points.toDouble() * 100.0).toInt()
             } else {
                 0
             }
@@ -59,11 +59,12 @@ class EventsServiceImpl(
             }
 
             firstAch?.let {
-                if (achieve.end.isBefore(Instant.now())) {
+                if (achieve.end.isAfter(Instant.now())) {
                     if (it.eventType == createEvent.type) {
                         achieve.copy(
                             points = achieve.points + createEvent.points,
-                            percent = (achieve.points + createEvent.points) / it.points * 100
+                            percent = ((achieve.points + createEvent.points).toDouble()
+                                    / it.points.toDouble() * 100.0).toInt()
                         )
                     } else {
                         achieve
@@ -91,7 +92,7 @@ class EventsServiceImpl(
             )
         )
 
-        if (newEvent.type == "WORK"){
+        if (newEvent.type == "WORK") {
             competitionService.reduceHealth(newEvent)
         }
         return newEvent
@@ -110,7 +111,7 @@ class EventsServiceImpl(
         }
 
         val percent = if (it.eventType == createEvent.type) {
-            createEvent.points / it.points * 100
+            (createEvent.points.toDouble() / it.points.toDouble() * 100.0).toInt()
         } else {
             0
         }
