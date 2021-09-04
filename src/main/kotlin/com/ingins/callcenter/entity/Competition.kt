@@ -24,5 +24,6 @@ data class CompetitionResult(
 
 data class CompetitionUser(
     val userId: UUID,
+    var lastResult: Double?,
     var health: Int
 )

@@ -14,6 +14,7 @@ class CompetitionServiceImpl(
     private val userRepository: UserRepository,
     private val eventsRepository: EventsRepository
 ) : CompetitionService {
+
     @Transactional
     override fun startCompetition(userId: UUID): Competition {
         val existingCompetition = competitionRepository.findAll()
@@ -23,7 +24,8 @@ class CompetitionServiceImpl(
             competitionRepository.save(Competition(
                 user1 = CompetitionUser(
                     userId = userId,
-                    health = 3
+                    health = 3,
+                    lastResult = null
                 ),
                 user2 = null,
                 isFinished = false,
@@ -33,7 +35,8 @@ class CompetitionServiceImpl(
             val competition = existingCompetition.first()
             competition.user2 = CompetitionUser(
                 userId = userId,
-                health = 3
+                health = 3,
+                lastResult = null
             )
             competitionRepository.save(competition)
         }
@@ -46,6 +49,46 @@ class CompetitionServiceImpl(
     }
 
     @Transactional
+    override fun fixResult(userId: UUID,eventId: UUID): Competition {
+        val event = eventsRepository.getById(eventId)
+        val currentCompetition = competitionRepository.findAll()
+            .first { !it.isFinished
+                    && (it.user1?.let { it.userId == event.user.id} ?: false
+                    || it.user2?.let { it.userId == event.user.id} ?: false) }
+
+
+        val (user, opponent) = if (currentCompetition.user1!!.userId == event.user.id) {
+            currentCompetition.user1 to currentCompetition.user2!!
+        } else {
+            currentCompetition.user2!! to currentCompetition.user1
+        }
+
+        user.lastResult = (event.points/event.data.documentAnalized!!.timer.epochSecond
+                *event.data.documentAnalized.difficult).toDouble()
+        if(opponent.lastResult!=null){
+            if(opponent.lastResult!! >=user.lastResult!!){
+                user.health -=1
+            } else {
+                opponent.health -=1
+            }
+            if (user.health==0){
+                currentCompetition.isFinished = true
+                currentCompetition.result = CompetitionResult(
+                    winnerUserId = opponent.userId,
+                    earnedPoints = 5
+                )
+            } else if (opponent.health==0){
+                currentCompetition.isFinished = true
+                currentCompetition.result = CompetitionResult(
+                    winnerUserId = user.userId,
+                    earnedPoints = 5
+                )
+            }
+        }
+        return competitionRepository.save(currentCompetition)
+    }
+
+    /*@Transactional
     override fun reduceHealth(event: Events): Competition? {
         val currentCompetition = competitionRepository.findAll()
             .firstOrNull { !it.isFinished
@@ -88,5 +131,5 @@ class CompetitionServiceImpl(
         } else {
             return null
         }
-    }
+    }*/
 }

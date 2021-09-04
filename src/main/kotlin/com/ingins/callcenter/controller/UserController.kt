@@ -1,5 +1,6 @@
 package com.ingins.callcenter.controller
 
+import com.ingins.callcenter.dto.`in`.CreateUserDto
 import com.ingins.callcenter.entity.User
 import com.ingins.callcenter.service.UserService
 import org.springframework.web.bind.annotation.*
@@ -13,8 +14,8 @@ class UserController(
 ) {
 
     @PostMapping("/create")
-    fun createUser(@RequestBody username: String) : User {
-        return userService.createUser(username)
+    fun createUser(@RequestBody request: CreateUserDto) : User {
+        return userService.createUser(request.username)
     }
 
     @PostMapping("/all")
