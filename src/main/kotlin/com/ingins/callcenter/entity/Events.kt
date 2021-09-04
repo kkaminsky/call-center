@@ -42,18 +42,18 @@ data class SpeedGame(
 ): Serializable
 
 data class SearchGame(
-    val timer: Instant,
+    val timer: Int,
     val errors: Int,
     val accuracy: Double
 ): Serializable
 
 data class TabGame(
     val accuracy: Double,
-    val timer: Instant
+    val timer: Int
 ): Serializable
 
 data class CookieClickerGame(
-    val timer: Instant,
+    val timer: Int,
     val score: Int,
     val errors: Int
 ): Serializable
