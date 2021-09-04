@@ -7,6 +7,5 @@ import java.util.*
 interface CompetitionService {
     fun startCompetition(userId: UUID): Competition
     fun getCompetition(competitionId: UUID): Competition
-    fun getCompetitionByUser(userId: UUID): Competition
     fun reduceHealth(event: Events): Competition?
 }

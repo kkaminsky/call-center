@@ -45,12 +45,6 @@ class CompetitionServiceImpl(
         return competitionRepository.getById(competitionId)
     }
 
-    @Transactional(readOnly = true)
-    override fun getCompetitionByUser(userId: UUID): Competition {
-        return competitionRepository.findAll()
-            .first { !it.isFinished && (it.user1?.let { it.userId == userId } ?: false || it.user2?.let { it.userId == userId } ?: false) }
-    }
-
     @Transactional
     override fun reduceHealth(event: Events): Competition? {
         val currentCompetition = competitionRepository.findAll()

@@ -16,6 +16,7 @@ import java.time.temporal.ChronoField
 class EventsServiceImpl(
     private val eventsRepository: EventsRepository,
     private val userRepository: UserRepository,
+    private val competitionService: CompetitionService,
     private val achivementRepository: AchivementRepository
 ) : EventsService {
 
@@ -81,7 +82,7 @@ class EventsServiceImpl(
 
         val savedUser = userRepository.save(user)
 
-        return eventsRepository.save(
+        val newEvent = eventsRepository.save(
             Events(
                 user = savedUser,
                 type = createEvent.type,
@@ -89,6 +90,11 @@ class EventsServiceImpl(
                 points = createEvent.points
             )
         )
+
+        if (newEvent.type == "WORK"){
+            competitionService.reduceHealth(newEvent)
+        }
+        return newEvent
     }
 
     private fun addChiv(
