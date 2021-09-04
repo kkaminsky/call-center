@@ -9,7 +9,7 @@ import javax.persistence.*
 @Access(value= AccessType.FIELD)
 class Events(
     @field:ManyToOne(cascade = [CascadeType.DETACH, CascadeType.REFRESH])
-    @field:JoinColumn(name = "user", nullable = false)
+    @field:JoinColumn(name = "user_id", nullable = false)
     var user: User,
     val type: String,
     @field:Type(type = "jsonb")

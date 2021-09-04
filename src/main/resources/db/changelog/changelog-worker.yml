@@ -58,7 +58,7 @@ databaseChangeLog:
                     foreignKeyName: events_user_fkey
                     references: ${schema}.user(id)
                     deleteCascade: true
-                  name: user
+                  name: user_id
                   type: UUID
               - column:
                   name: type
