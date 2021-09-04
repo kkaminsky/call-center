@@ -12,10 +12,10 @@ import javax.persistence.Entity
 @Access(value= AccessType.FIELD)
 class Tourney(
     val startTime: Instant,
-    val endTime: Instant,
+    var endTime: Instant? = null,
     val type: String,
     @field:Type(type = "jsonb")
-    val result: ResultData
+    var result: ResultData
 ) : BaseUUIDEntity(){
 }
 

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/achivement")
+@RequestMapping("/api/achivement")
 class AchivementController(
     private val achivementService: AchivementService
 ) {

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.*
 import java.time.temporal.ChronoField
+import java.util.*
 
 @Service
 class EventsServiceImpl(
@@ -110,6 +111,13 @@ class EventsServiceImpl(
             )
         )
         return newEvent
+    }
+
+    @Transactional(readOnly = true)
+    override fun getEventsByUser(userId: UUID): List<Events> {
+        return eventsRepository.findAll().filter {
+            it.user.id == userId
+        }
     }
 
     private fun addChiv(

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
 @RestController
-@RequestMapping("/competition")
+@RequestMapping("/api/competition")
 class CompetitionController(
     private val competitionService: CompetitionService
 ) {

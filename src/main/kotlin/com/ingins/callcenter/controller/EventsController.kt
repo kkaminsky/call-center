@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/events")
+@RequestMapping("/api/events")
 class EventsController(
     private val eventsService: EventsService
 ) {
@@ -17,6 +17,11 @@ class EventsController(
     @PostMapping("/create")
     fun createEvent(@RequestBody request: CreateEventDto): Events {
         return eventsService.createEvent(request)
+    }
+
+    @PostMapping("/get/by/user")
+    fun getEventsForUsers(@RequestBody dto: CompetitionController.UserIdDto): List<Events> {
+        return eventsService.getEventsByUser(dto.userId)
     }
 
 }

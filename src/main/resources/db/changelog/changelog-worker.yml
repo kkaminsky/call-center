@@ -28,6 +28,9 @@ databaseChangeLog:
                   name: rank
                   type: bigint
               - column:
+                  name: earned_points
+                  type: bigint
+              - column:
                   name: data
                   type: jsonb
               - column:
