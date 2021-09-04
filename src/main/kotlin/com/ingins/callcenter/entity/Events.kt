@@ -24,9 +24,14 @@ data class EventsData(
     val searchGame: SearchGame? = null,
     val tabGame: TabGame? = null,
     val cookieClickerGame: CookieClickerGame? = null,
-    val documentAnalized: DocumentAnalized? = null
+    val documentAnalized: DocumentAnalized? = null,
+    val achivmentEarned: AchivmentEarned? = null
 ) : Serializable
 
+
+data class AchivmentEarned(
+    val achivement: Achivement
+)
 
 data class SpeedGame(
     val wordPreMinute: Int,

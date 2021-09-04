@@ -1,9 +1,7 @@
 package com.ingins.callcenter.service
 
 import com.ingins.callcenter.dto.`in`.CreateEventDto
-import com.ingins.callcenter.entity.Achieve
-import com.ingins.callcenter.entity.Achivement
-import com.ingins.callcenter.entity.Events
+import com.ingins.callcenter.entity.*
 import com.ingins.callcenter.repository.AchivementRepository
 import com.ingins.callcenter.repository.EventsRepository
 import com.ingins.callcenter.repository.UserRepository
@@ -53,6 +51,8 @@ class EventsServiceImpl(
             )
         }
 
+        val finishedAchives = mutableListOf<Achivement>()
+
         val updatedList = user.data.achieves.map { achieve ->
             val firstAch = allAchivement.firstOrNull {
                 it.name == achieve.name
@@ -60,12 +60,18 @@ class EventsServiceImpl(
 
             firstAch?.let {
                 if (achieve.end.isAfter(Instant.now())) {
-                    if (it.eventType == createEvent.type) {
-                        achieve.copy(
+                    if (it.eventType == createEvent.type && achieve.percent < 100 ) {
+                        val res = achieve.copy(
                             points = achieve.points + createEvent.points,
                             percent = ((achieve.points + createEvent.points).toDouble()
                                     / it.points.toDouble() * 100.0).toInt()
                         )
+
+                        if (res.percent >= 100){
+                           finishedAchives.add(it)
+                        }
+
+                        res
                     } else {
                         achieve
                     }
@@ -80,6 +86,18 @@ class EventsServiceImpl(
                 addList
             )
         )
+        user.earnedPoints += createEvent.points
+
+        finishedAchives.map {
+            eventsRepository.save(Events(
+                user = user,
+                type = "ACHIVE",
+                data = EventsData(
+                    achivmentEarned = AchivmentEarned(it)
+                ),
+                points = 10
+            ))
+        }
 
         val savedUser = userRepository.save(user)
 

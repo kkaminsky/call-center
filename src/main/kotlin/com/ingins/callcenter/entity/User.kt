@@ -12,6 +12,7 @@ import javax.persistence.Entity
 class User(
     var name: String,
     var rank: Int,
+    var earnedPoints: Int = 0,
     @field:Type(type = "jsonb")
     var data: Data
 ) : BaseUUIDEntity()
